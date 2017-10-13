@@ -6,18 +6,18 @@
 
 (format t "Loading prerequisites....~%")
 #+quicklisp
-(ql:quickload '(#-sbcl :iolib #+sbcl :sb-bsd-sockets :iterate :alexandria :cl-fad))
+(ql:quickload '(#-sbcl :iolib #+sbcl :sb-bsd-sockets :iterate :alexandria :cl-fad :bordeaux-threads))
 #-quicklisp
 (progn
   #-sbcl(require :iolib)
   #+sbcl(require :sb-bsd-sockets)
   (require :iterate)
   (require :alexandria)
-  (require :cl-fad))
+  (require :cl-fad)
+  (require :bordeaux-threads))
 
 (format t "Loading file-server...~%")
 (push *default-pathname-defaults* asdf:*central-registry*)
 (asdf:load-system :lispos-file)
 (format t "Running file-server on port ~D. Use ^C to quit.~%" file-server::*default-file-server-port*)
-(file-server::run-file-server)
-(quit)
+(bt:make-thread #'file-server::run-file-server :name "FILE-SERVER")
