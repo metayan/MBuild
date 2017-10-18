@@ -43,8 +43,8 @@ cold-image-vmdk: cold-image
 	-VBoxManage closemedium disk mezzano.vmdk
 	rm -f mezzano.vmdk
 	VBoxManage convertfromraw --format vmdk mezzano.image mezzano.vmdk
-	VBoxManage storagectl "$(VM_NAME)" --name IDE --add ide --controller PIIX4
-	VBoxManage storageattach "$(VM_NAME)" --storagectl IDE --port 0 --device 0 --type hdd --medium mezzano.vmdk
+	-VBoxManage storagectl "$(VM_NAME)" --name IDE --add ide --controller PIIX4
+	-VBoxManage storageattach "$(VM_NAME)" --storagectl IDE --port 0 --device 0 --type hdd --medium mezzano.vmdk
 
 run-file-server: run-file-server.lisp
 	cd Mezzano/file-server/ && $(SBCL) --load ../../run-file-server.lisp
